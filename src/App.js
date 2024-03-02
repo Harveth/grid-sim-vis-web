@@ -85,10 +85,18 @@ const GraphComponent = () => {
         return edge;
       });
 
+      const updatedNodes = graph.nodes.map((node) => ({
+        ...node,
+        label: String(Math.floor(Math.random() * 100)),
+      }));
+
+
+
 
       setGraph((prevGraph) => ({
         ...prevGraph,
         edges: updatedEdges,
+        nodes: updatedNodes,
       }));
     }, 1000);
 
