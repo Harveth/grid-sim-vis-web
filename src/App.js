@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import JsonDisplayRow from "./JsonDisplayRow";
 import Graph from "react-vis-network-graph";
 
 const init_color = { color: "black" };
@@ -9,6 +10,7 @@ const GraphComponent = () => {
   const [time, setTime] = useState("");
   const [fetchInterval, setFetchInterval] = useState(5000); // Default fetch interval in milliseconds
   const [remaining, setRemaining] = useState(0); // State for remaining attribute
+  const [jsonData, setJsonData] = useState({}); // State for JSON data
   const options = {
     edges: {
       color: "#000000", // Initial edge color
@@ -22,9 +24,14 @@ const GraphComponent = () => {
         if (!response.ok) return;
         const data = await response.json();
         if (data === null) return;
+        let grid_state = data.grid_state;
+        for (let key in grid_state) {
+          grid_state[key] = parseFloat(grid_state[key].toFixed(5));
+        }
         setTime(data.time);
         setMeters(data.meters);
         setRemaining(data.remaining);
+        setJsonData(data.grid_state);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -89,13 +96,14 @@ const GraphComponent = () => {
             value={fetchInterval}
             onChange={handleIntervalChange}
           />
-          <span style={{ display: "block", marginTop: "5px"}}>
+          <span style={{ display: "block", marginTop: "5px" }}>
             {fetchInterval} milliseconds
           </span>
         </div>
-        <div style={{ marginTop: "10px",marginBottom: "10px" }}>
+        <div style={{ marginTop: "10px", marginBottom: "10px" }}>
           Remaining frames in buffer: {remaining}
         </div>
+        <JsonDisplayRow data={jsonData} />
         <div
           style={{
             display: "grid",
