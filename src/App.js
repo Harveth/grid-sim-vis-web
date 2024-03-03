@@ -4,100 +4,41 @@ import Graph from "react-vis-network-graph";
 const init_color = { color: "black" };
 const init_node_color = { color: "#36bbd6" };
 
-
-async function updateState() {
-  let data = null;
-  try {
-    const response = await fetch("http://localhost:5000/next", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      }
-    });
-    data = await response.json();
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-  if (data === null) {
-    return { nodes: [], edges: [] };
-  }
-  return {
-    nodes: data.meters.map((meter) => {
-      return {
-        id: meter.id,
-        label: `Node ${meter.id}`,
-        color: init_node_color,
-      };
-    }),
-    edges: data.meters
-      .filter((meter) => meter.in_trade)
-      .map((meter) => {
-        return {
-          from: meter.id,
-          to: meter.in_trade,
-          color: "red",
-        };
-      }),
-  };
-}
-
 const GraphComponent = () => {
-  const [graph, setGraph] = useState({});
-
+  const [meters, setMeters] = useState([]);
+  const [time, setTime] = useState("");
   const options = {
     edges: {
       color: "#000000", // Initial edge color
     },
   };
 
-  const events = {
-    select: ({ edges }) => {
-      // Handle edge selection and change color
-      if (edges && edges.length === 1) {
-        const selectedEdge = edges[0];
-        const updatedEdges = graph.edges.map((edge) => {
-          if (
-            edge.from === selectedEdge.from &&
-            edge.to === selectedEdge.to
-          ) {
-            // Change the color when the selected edge is found
-            return { ...edge, color: "red" }; // Change to your desired color
-          }
-          return edge;
-        });
-
-        setGraph((prevGraph) => ({
-          ...prevGraph,
-          edges: updatedEdges,
-        }));
-      }
-    },
-  };
-
   useEffect(() => {
-    const fetchDataAndUpdateGraph = async () => {
+    const fetchData = async () => {
       try {
-        const updatedGraph = await updateState();
-        setGraph(updatedGraph);
+        const response = await fetch("http://127.0.0.1:5000/next");
+        if (!response.ok) return;
+        const data = await response.json();
+        setTime(data.time)
+        setMeters(data.meters);
       } catch (error) {
-        console.error("Error fetching and updating graph:", error);
+        console.error("Error fetching data:", error);
       }
     };
-  
-    const interval = setInterval(fetchDataAndUpdateGraph, 1000);
-  
-    // Clean up function
+
+    const interval = setInterval(fetchData, 500);
     return () => {
       clearInterval(interval);
     };
   }, []);
+
   return (
     <div>
       <div
         style={{
           width: "100%",
           display: "flex",
+          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -111,13 +52,23 @@ const GraphComponent = () => {
         >
           P2P System Visualizer
         </h1>
-      </div>
-      <Graph
+        <h2>{time}</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(8, 1fr)", gap: "10px", justifyContent: "center" }}>
+          {meters.map((meter, index) => (
+            <div key={index} style={{ minWidth: "200px", borderWidth: "1px", borderStyle: "solid", borderColor: ["red", "green"][(meter.surplus >= 0) * 1], padding: "8px"}}>
+              <h3>Meter {meter.id}</h3>
+              <p>Surplus: {parseFloat(meter.surplus.toFixed(5))}</p>
+              <p style={{ minWidth: "100px" }}>In Trade: {meter.in_trade}</p>
+            </div>
+          ))}
+        </div>
+        {/* <Graph
         graph={graph}
         options={options}
         events={events}
         style={{ height: "90vh" }}
-      />
+      /> */}
+      </div>
     </div>
   );
 };
