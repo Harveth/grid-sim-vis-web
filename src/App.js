@@ -24,7 +24,7 @@ const GraphComponent = () => {
         if (data === null) return;
         setTime(data.time);
         setMeters(data.meters);
-        setRemaining(data.remaining); // Update remaining state
+        setRemaining(data.remaining);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -34,7 +34,7 @@ const GraphComponent = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [fetchInterval]); // Include fetchInterval in dependency array to trigger effect when it changes
+  }, [fetchInterval]);
 
   const handleIntervalChange = (event) => {
     setFetchInterval(parseInt(event.target.value));
@@ -61,24 +61,41 @@ const GraphComponent = () => {
           P2P System Visualizer
         </h1>
         <h2>{time}</h2>
-        <div style={{ padding: "10px" }}>
-          <label htmlFor="fetchInterval">Fetch Interval (milliseconds):</label>
+        <div style={{ padding: "20px" }}>
+          <label
+            htmlFor="fetchInterval"
+            style={{ display: "block", marginBottom: "10px" }}
+          >
+            Fetch Interval (milliseconds):
+          </label>
           <input
             type="range"
             id="fetchInterval"
             name="fetchInterval"
+            style={{
+              width: "100%",
+              WebkitAppearance: "none",
+              appearance: "none",
+              height: "10px",
+              borderRadius: "5px",
+              background: "#d3d3d3",
+              outline: "none",
+              opacity: "0.7",
+              transition: "opacity 0.2s",
+            }}
             min="100"
             max="3000"
             step="100"
             value={fetchInterval}
             onChange={handleIntervalChange}
           />
-          <span>{fetchInterval} milliseconds</span>
+          <span style={{ display: "block", marginTop: "5px"}}>
+            {fetchInterval} milliseconds
+          </span>
         </div>
-        <div style={{ marginBottom: "10px" }}>
+        <div style={{ marginTop: "10px",marginBottom: "10px" }}>
           Remaining frames in buffer: {remaining}
-        </div>{" "}
-        {/* Display remaining attribute */}
+        </div>
         <div
           style={{
             display: "grid",
