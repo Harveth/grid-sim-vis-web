@@ -19,6 +19,7 @@ const GraphComponent = () => {
         const response = await fetch("http://127.0.0.1:5000/next");
         if (!response.ok) return;
         const data = await response.json();
+        if (data === null) return;
         setTime(data.time)
         setMeters(data.meters);
       } catch (error) {
