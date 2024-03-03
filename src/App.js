@@ -61,7 +61,7 @@ const GraphComponent = () => {
           P2P System Visualizer
         </h1>
         <h2>{time}</h2>
-        <div style={{padding: "10px"}}>
+        <div style={{ padding: "10px" }}>
           <label htmlFor="fetchInterval">Fetch Interval (milliseconds):</label>
           <input
             type="range"
@@ -75,10 +75,30 @@ const GraphComponent = () => {
           />
           <span>{fetchInterval} milliseconds</span>
         </div>
-        <div style={{ marginBottom: "10px" }}>Remaining frames in buffer: {remaining}</div> {/* Display remaining attribute */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(8, 1fr)", gap: "10px", justifyContent: "center" }}>
+        <div style={{ marginBottom: "10px" }}>
+          Remaining frames in buffer: {remaining}
+        </div>{" "}
+        {/* Display remaining attribute */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(8, 1fr)",
+            gap: "10px",
+            justifyContent: "center",
+          }}
+        >
           {meters.map((meter, index) => (
-            <div key={index} style={{ minWidth: "200px", borderWidth: "1px", borderStyle: "solid", borderColor: ["red", "green"][(meter.surplus >= 0) * 1], padding: "8px", borderRadius: "20px"}}>
+            <div
+              key={index}
+              style={{
+                minWidth: "200px",
+                borderWidth: "1px",
+                borderStyle: "solid",
+                borderColor: ["red", "green"][(meter.surplus >= 0) * 1],
+                padding: "8px",
+                borderRadius: "20px",
+              }}
+            >
               <h3>Meter {meter.id}</h3>
               <p>Surplus: {parseFloat(meter.surplus.toFixed(5))}</p>
               <p style={{ minWidth: "100px" }}>In Trade: {meter.in_trade}</p>
