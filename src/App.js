@@ -55,7 +55,7 @@ const GraphComponent = () => {
         <h2>{time}</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(8, 1fr)", gap: "10px", justifyContent: "center" }}>
           {meters.map((meter, index) => (
-            <div key={index} style={{ minWidth: "200px", borderWidth: "1px", borderStyle: "solid", borderColor: ["red", "green"][(meter.surplus >= 0) * 1], padding: "8px"}}>
+            <div key={index} style={{ minWidth: "200px", borderWidth: "1px", borderStyle: "solid", borderColor: ["red", "green"][(meter.surplus >= 0) * 1], padding: "8px", borderRadius: "20px"}}>
               <h3>Meter {meter.id}</h3>
               <p>Surplus: {parseFloat(meter.surplus.toFixed(5))}</p>
               <p style={{ minWidth: "100px" }}>In Trade: {meter.in_trade}</p>
