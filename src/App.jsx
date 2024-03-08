@@ -1,21 +1,25 @@
-import React, { useState, useEffect } from "react";
-import JsonDisplayRow from "./JsonDisplayRow";
+import React from "react";
+import { useState, useEffect } from "react";
+import JsonDisplayRow from "./components/JsonDisplayRow";
 import Graph from "react-vis-network-graph";
 
 const init_color = { color: "black" };
 const init_node_color = { color: "#36bbd6" };
+import "./App.css";
 
-const GraphComponent = () => {
+const options = {
+  edges: {
+    color: "#000000", // Initial edge color
+  },
+};
+
+function App() {
   const [meters, setMeters] = useState([]);
   const [time, setTime] = useState("");
   const [fetchInterval, setFetchInterval] = useState(5000); // Default fetch interval in milliseconds
   const [remaining, setRemaining] = useState(0); // State for remaining attribute
   const [jsonData, setJsonData] = useState({}); // State for JSON data
-  const options = {
-    edges: {
-      color: "#000000", // Initial edge color
-    },
-  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -139,6 +143,6 @@ const GraphComponent = () => {
       </div>
     </div>
   );
-};
+}
 
-export default GraphComponent;
+export default App;

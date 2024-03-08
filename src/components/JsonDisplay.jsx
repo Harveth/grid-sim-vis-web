@@ -23,7 +23,7 @@ function JsonDisplay({ data }) {
   };
 
   const tableRowStyle = {
-    '&:nth-child(even)': {
+    '&:nthChild(even)': {
       backgroundColor: '#f9f9f9',
     },
   };

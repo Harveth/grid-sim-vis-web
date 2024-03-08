@@ -8,18 +8,6 @@ function JsonDisplayRow({ data }) {
     margin: '10px auto',
   };
 
-  const tableHeaderStyle = {
-    padding: '10px',
-    backgroundColor: '#f5f5f5',
-    borderBottom: '1px solid #ddd',
-    textAlign: 'left',
-  };
-
-  const tableRowStyle = {
-    '&:nth-child(even)': {
-      backgroundColor: '#f9f9f9',
-    },
-  };
 
   const tableCellStyle = {
     padding: '10px',
@@ -38,12 +26,12 @@ function JsonDisplayRow({ data }) {
         <thead>
           <tr>
             {flatData.map(({ key }) => (
-              <th key={key} style={tableHeaderStyle}>{key}</th>
+              <th style={tableCellStyle} key={key} >{key}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          <tr style={tableRowStyle}>
+          <tr>
             {flatData.map(({ value }) => (
               <td key={value} style={tableCellStyle}>{typeof value === 'object' ? JSON.stringify(value) : value}</td>
             ))}
